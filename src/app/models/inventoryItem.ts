@@ -1,6 +1,5 @@
-export interface Ingredient {
+export interface InventoryItem {
   id?: number,
   name: string,
-  cost: number,
   quantity: number
 }

@@ -1,4 +1,4 @@
-export interface Ingredient {
+export interface OrderItem {
   id?: number,
   name: string,
   cost: number,

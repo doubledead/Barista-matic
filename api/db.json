@@ -3,56 +3,47 @@
     {
       "id": 1,
       "name": "Coffee",
-      "cost": 0.75,
-      "quantity": 10
+      "cost": 0.75
     },
     {
       "id": 2,
       "name": "Decaf Coffee",
-      "cost": 0.75,
-      "quantity": 10
+      "cost": 0.75
     },
     {
       "id": 3,
       "name": "Sugar",
-      "cost": 0.25,
-      "quantity": 10
+      "cost": 0.25
     },
     {
       "id": 4,
       "name": "Cream",
-      "cost": 0.25,
-      "quantity": 10
+      "cost": 0.25
     },
     {
       "id": 5,
       "name": "Steamed Milk",
-      "cost": 0.25,
-      "quantity": 10
+      "cost": 0.25
     },
     {
       "id": 6,
       "name": "Foamed Milk",
-      "cost": 0.35,
-      "quantity": 10
+      "cost": 0.35
     },
     {
       "id": 7,
       "name": "Espresso",
-      "cost": 1.10,
-      "quantity": 10
+      "cost": 1.10
     },
     {
       "id": 8,
       "name": "Cocoa",
-      "cost": 0.90,
-      "quantity": 10
+      "cost": 0.90
     },
     {
       "id": 9,
       "name": "Whipped Cream",
-      "cost": 1.00,
-      "quantity": 10
+      "cost": 1.00
     }
   ],
   "recipes": [
@@ -161,6 +152,53 @@
         }
       ],
       "cost": 2.90
+    }
+  ],
+  "inventory": [
+    {
+      "id": 1,
+      "name": "Coffee",
+      "quantity": 10
+    },
+    {
+      "id": 2,
+      "name": "Decaf Coffee",
+      "quantity": 10
+    },
+    {
+      "id": 3,
+      "name": "Sugar",
+      "quantity": 10
+    },
+    {
+      "id": 4,
+      "name": "Cream",
+      "quantity": 10
+    },
+    {
+      "id": 5,
+      "name": "Steamed Milk",
+      "quantity": 10
+    },
+    {
+      "id": 6,
+      "name": "Foamed Milk",
+      "quantity": 10
+    },
+    {
+      "id": 7,
+      "name": "Espresso",
+      "quantity": 10
+    },
+    {
+      "id": 8,
+      "name": "Cocoa",
+      "quantity": 10
+    },
+    {
+      "id": 9,
+      "name": "Whipped Cream",
+      "quantity": 10
     }
   ]
 }
