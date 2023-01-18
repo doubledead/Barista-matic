@@ -1,22 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { IngredientService } from '../services/ingredients/ingredient.service';
+import { Ingredient } from '../models/ingredient';
 import { RecipeService } from '../services/recipes/recipe.service';
 import { Recipe } from '../models/recipe';
 import { Order } from '../models/order';
 import { OrderItem } from '../models/orderItem';
-import { InventoryService } from '../services/inventory/inventory.service';
-import { InventoryItem } from '../models/inventoryItem';
-import { Ingredient } from '../models/ingredient';
-
-// export interface Order {
-//   id?: number,
-//   total?: number,
-//   items: OrderItem[]
-// }
-// export class NewOrder implements Order {
-//   id?: number;
-//   total?: number;
-//   items: OrderItem[]
-// }
 
 @Component({
   selector: 'app-order',
@@ -25,27 +13,31 @@ import { Ingredient } from '../models/ingredient';
 })
 export class OrderComponent implements OnInit {
   // #region // ---------- Properties ---------- //
+  orderId: number = 0;
   orderTotal: number = 0;
   recipes: Recipe[] = [];
-  inventoryItems: InventoryItem[] = [];
+  ingredients: Ingredient[] = [];
   orderItems: OrderItem[] = [];
-  orders: Order[] = [];
-  // order = <Order>{};
-  // myOrder = new NewOrder();
+
+  // Initialize blank order
+  order: Order = {
+    id: this.orderId,
+    step: 0
+  }
 
   // #endregion
 
   // #region // ---------- LIFECYCLE ---------- //
 
-  constructor(private recipetService: RecipeService, private inventoryService: InventoryService) { }
+  constructor(private recipetService: RecipeService, private ingredientService: IngredientService) { }
 
   ngOnInit(): void {
-    this.recipetService.getRecipes().subscribe(data => {
-      this.recipes = data;
+    this.ingredientService.getIngredients().subscribe(data => {
+      this.ingredients = data;
     });
 
-    this.inventoryService.getInventoryItems().subscribe(data => {
-      this.inventoryItems = data;
+    this.recipetService.getRecipes().subscribe(data => {
+      this.recipes = data;
     });
   }
 
@@ -53,53 +45,77 @@ export class OrderComponent implements OnInit {
 
   // #region // ------------ Methods ------------ //
 
-  getInventoryItem(ingredient: Ingredient) {
-    let invItem: InventoryItem = {
-      name: '',
-      quantity: 0
-    };
-    this.inventoryItems.forEach(item => {
-      if (item.name == ingredient.name) {
-        invItem = item;
-      }
-    });
-
-    return invItem;
+  recipe(recipeId: number) {
+    return this.recipes.find(recipe => recipeId === recipe.id);
   }
 
-
   manageInventory(drink: Recipe) {
-    drink.ingredients.forEach(ingredient => {
-      console.log('Ingredient: ', ingredient);
-      // console.log('InventoryItem: ', this.getInventoryItem(ingredient));
-      this.inventoryItems.forEach(item => {
-        if (item.name == ingredient.name) {
-          if (ingredient.quantity) item.quantity - ingredient.quantity;
+    drink.ingredients.forEach(drinkIngredient => {
+      this.ingredients.forEach(ingredient => {
+        if (ingredient.name == drinkIngredient.name) {
+          if (!ingredient.outOfStock) {
+            let tempStockLevel: number = ingredient.stock - drinkIngredient.stock;
+            if (tempStockLevel >= 0) {
+              ingredient.stock = ingredient.stock - drinkIngredient.stock;
+              if (ingredient.stock == 0) {
+                ingredient.outOfStock = true;
+                this.recipes.forEach(recipe => {
+                  if (drink.id == recipe.id) recipe.outOfStock = true;
+                });
+              }
+            } else {
+              console.log('Cannot create drink');
+            }
+          }
         }
       });
     });
-
-    console.log('inventoryItems: ', this.inventoryItems);
-
   }
 
   addToOrder(drink: Recipe) {
-    this.manageInventory(drink);
+    console.log('Recipe: ', this.recipe(drink.id));
 
-    this.orderTotal += drink.cost;
+    let drinkRecipe = this.recipe(drink.id);
 
-    let orderItem: OrderItem = {
-      name: drink.name,
-      cost: drink.cost,
-      quantity: 1
-    };
+    if (drinkRecipe && !drinkRecipe.outOfStock) {
+      this.manageInventory(drink);
 
-    this.orderItems.push(orderItem);
+      this.orderTotal += drink.cost;
 
-    // this.myOrder.items.push(orderItem);
+      let orderItem: OrderItem = {
+        name: drink.name,
+        cost: drink.cost,
+        quantity: 1
+      };
+
+      this.orderItems.push(orderItem);
+    }
   }
 
-  submitOrder() {}
+  startOrder() {
+    if (this.order.step == 0) {
+      // do some animation to show next section
+      this.order.step = 1;
+    }
+  }
+
+  dispenseDrink() {
+    if (this.order.step == 1) {
+      // animation
+      this.order.step = 2
+    }
+  }
+
+  completeOrder() {
+    // Add order to database
+
+
+    // Clear order and increment id
+    this.orderId++;
+    this.order.id =this.orderId;
+    // Change Step back to beginning
+    this.order.step = 0;
+  }
 
   // #endregion
 

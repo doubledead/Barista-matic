@@ -2,7 +2,8 @@ import { Ingredient } from "./ingredient"
 
 export interface Recipe {
   id: number,
-  name: string,
   cost: number,
-  ingredients: Ingredient[]
+  ingredients: Ingredient[],
+  name: string,
+  outOfStock?: boolean
 }
