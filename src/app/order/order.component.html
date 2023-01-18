@@ -1,25 +1,40 @@
-<h1>Inventory</h1>
+<h2>Inventory</h2>
 <div class="d-flex flex-row bd-highlight mb-3">
   <div *ngFor="let item of ingredients" class="p-2 bd-highlight">
-    <span [ngClass]="{'text-black-50': item.outOfStock}">{{ item.name }}: {{ item.stock}}</span>
+    <span [ngClass]="{'text-black-50': item.outOfStock}">
+      {{ item.name }}: {{ item.stock}}&nbsp;
+      <button
+        *ngIf="item.outOfStock"
+        class="btn btn-primary btn-sm"
+        type="button"
+        (click)="restockIngrient(item.id)"
+        [attr.disabled]="!item.outOfStock ? true : null">
+        Restock
+      </button>
+    </span>
   </div>
 </div>
-<div class="row">
-  <!-- <div class="col-6">
-    <h1>Inventory</h1>
-    <div *ngFor="let item of ingredients">
-      <p>{{ item.name }}: {{ item.stock}}</p>
-    </div>
-    <hr aria-hidden="true">
-  </div> -->
+<div class="row" *ngIf="orderStep == 1">
   <div class="col-6">
-    <h1>Order Here</h1>
+    <h2>Begin Order Here</h2>
+    <br aria-hidden="true">
+    <button
+      class="btn btn-outline-success"
+      type="button"
+      (click)="startOrder()">
+      Start
+    </button>
+  </div>
+</div>
+<div class="row" *ngIf="orderStep == 2">
+  <div class="col-6">
+    <h2>Select a drink</h2>&nbsp;
     <div *ngFor="let recipe of recipes">
       <p [ngClass]="{'text-black-50': recipe.outOfStock}">
         {{ recipe.name }}&nbsp;&nbsp;
         ${{ recipe.cost}}&nbsp;&nbsp;
         <button
-          class="btn btn-primary"
+          class="btn btn-success"
           type="button"
           (click)="addToOrder(recipe)"
           [attr.disabled]="recipe.outOfStock ? true : null">
@@ -33,10 +48,53 @@
       <p>
         {{ item.name }}&nbsp;&nbsp;
         ${{ item.cost}}&nbsp;&nbsp;
-        <!-- <button class="btn btn-primary" type="button" (click)="addToOrder(recipe)">Add</button> -->
       </p>
     </div>
-    <!-- <p>orderItems: {{ orderItems | json }}</p> -->
     <div><strong>Total:</strong> ${{ orderTotal }}</div>
+    <br aria-hidden="true">
+    <button
+      class="btn btn-primary"
+      type="button"
+      (click)="dispenseDrink()"
+      [attr.disabled]="orderItems.length == 0 ? true : null">
+      Dispense Drink
+    </button>
   </div>
 </div>
+<div class="row" *ngIf="orderStep == 3">
+  <div class="col-6">
+    <button class="btn btn-primary" type="button" disabled>
+      <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+      Your drink is being dispensed
+    </button>
+  </div>
+</div>
+<div class="row" *ngIf="orderStep == 4">
+  <div class="col-6">
+    <div class="alert alert-success" role="alert">
+      Your drink has been dispensed. Thank you for your order.
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="orderStep == 0">
+  <div class="col-6">
+    <div class="alert alert-danger" role="alert">
+      There has been an error with your order
+    </div>
+  </div>
+</div>
+<!-- Object Arrays -->
+<!--
+<br aria-hidden="true">
+<div class="row">
+  <div class="col-4">
+    Orders: {{ orders | json }}
+  </div>
+  <div class="col-4">
+    Order Items: {{ orderItems | json }}
+  </div>
+  <div class="col-4">
+    Recipes: {{ recipes | json }}
+  </div>
+</div>
+-->

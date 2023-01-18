@@ -13,16 +13,21 @@ import { OrderItem } from '../models/orderItem';
 })
 export class OrderComponent implements OnInit {
   // #region // ---------- Properties ---------- //
-  orderId: number = 0;
+
   orderTotal: number = 0;
   recipes: Recipe[] = [];
   ingredients: Ingredient[] = [];
+  orders: Order[] = [];
   orderItems: OrderItem[] = [];
+
+  orderId: number = 0;
+  orderStep: number = 1;
+  errorState: boolean = false;
 
   // Initialize blank order
   order: Order = {
     id: this.orderId,
-    step: 0
+    completed: false
   }
 
   // #endregion
@@ -43,10 +48,35 @@ export class OrderComponent implements OnInit {
 
   // #endregion
 
-  // #region // ------------ Methods ------------ //
+  // #region // ------------ Methods - Order ------------ //
 
   recipe(recipeId: number) {
     return this.recipes.find(recipe => recipeId === recipe.id);
+  }
+
+  ingredient(ingredientId: number) {
+    return this.ingredients.find(ingredient => ingredientId === ingredient.id);
+  }
+
+  restockIngrient(ingredientId: number) {
+    this.ingredients.forEach(ingredient => {
+      if (ingredientId === ingredient.id) {
+        ingredient.stock = 10;
+        ingredient.outOfStock = false;
+        this.restockRecipe(ingredient.id);
+      }
+    });
+  }
+
+  restockRecipe(ingredientId: number) {
+    this.recipes.forEach(recipe => {
+      recipe.ingredients.forEach(element => {
+        if (element.id == ingredientId) element.outOfStock = false;
+      });
+
+      if (recipe.ingredients.every(recipe => !recipe.outOfStock)) recipe.outOfStock = false;
+    });
+
   }
 
   manageInventory(drink: Recipe) {
@@ -73,8 +103,6 @@ export class OrderComponent implements OnInit {
   }
 
   addToOrder(drink: Recipe) {
-    console.log('Recipe: ', this.recipe(drink.id));
-
     let drinkRecipe = this.recipe(drink.id);
 
     if (drinkRecipe && !drinkRecipe.outOfStock) {
@@ -92,29 +120,67 @@ export class OrderComponent implements OnInit {
     }
   }
 
+  // #endregion
+
+  // #region // ------------ Methods - State Management ------------ //
+
+  resetState() {
+    this.orderItems = [];
+    this.orderTotal = 0;
+    this.orderId++;
+    this.order.id = this.orderId;
+    this.order.completed = false;
+    this.order.items = [];
+  }
+
   startOrder() {
-    if (this.order.step == 0) {
-      // do some animation to show next section
-      this.order.step = 1;
+    if (this.orderStep == 1) {
+      // TODO: Animation
+      this.orderStep = 2;
     }
   }
 
   dispenseDrink() {
-    if (this.order.step == 1) {
-      // animation
-      this.order.step = 2
+    if ((this.orderItems.length > 0) && (this.orderStep == 2)) {
+      // TODO: animation
+      this.submitOrder()
     }
   }
 
+  submitOrder() {
+    this.orderStep = 3;
+
+    let order: Order = {
+      id: this.order.id,
+      completed: true,
+      items: this.orderItems,
+      total: this.orderTotal,
+    };
+
+
+    // TODO: Add order to database
+    // TODO: Wait for database response and set state accordingly
+    this.orders.push(order);
+
+    setTimeout(
+      () => this.completeOrder(),
+      2000
+    );
+
+  }
+
+
+
   completeOrder() {
-    // Add order to database
 
+    this.orderStep = 4
 
-    // Clear order and increment id
-    this.orderId++;
-    this.order.id =this.orderId;
-    // Change Step back to beginning
-    this.order.step = 0;
+    this.resetState();
+
+    setTimeout(
+      () => this.orderStep = 1,
+      2000
+    );
   }
 
   // #endregion
