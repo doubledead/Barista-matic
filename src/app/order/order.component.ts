@@ -14,15 +14,15 @@ import { OrderItem } from '../models/orderItem';
 export class OrderComponent implements OnInit {
   // #region // ---------- Properties ---------- //
 
+  orderId: number = 0;
   orderTotal: number = 0;
-  recipes: Recipe[] = [];
+  orderStep: number = 1;
+  errorState: boolean = false;
+
   ingredients: Ingredient[] = [];
   orders: Order[] = [];
   orderItems: OrderItem[] = [];
-
-  orderId: number = 0;
-  orderStep: number = 1;
-  errorState: boolean = false;
+  recipes: Recipe[] = [];
 
   // Initialize blank order
   order: Order = {
@@ -169,10 +169,7 @@ export class OrderComponent implements OnInit {
 
   }
 
-
-
   completeOrder() {
-
     this.orderStep = 4
 
     this.resetState();
