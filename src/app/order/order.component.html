@@ -1,20 +1,31 @@
-<h1>Order Here</h1>
-<div *ngFor="let recipe of recipes">
-  <p>
-    {{ recipe.name }}&nbsp;&nbsp;
-    ${{ recipe.cost}}&nbsp;&nbsp;
-    <button class="btn btn-primary" type="button" (click)="addToOrder(recipe)">Add</button>
-  </p>
+<div class="row">
+  <div class="col-6">
+    <h1>Inventory</h1>
+    <div *ngFor="let item of inventoryItems">
+      <p>{{ item.name }}: {{ item.quantity}}</p>
+    </div>
+    <hr aria-hidden="true">
+  </div>
+  <div class="col-6">
+    <h1>Order Here</h1>
+    <div *ngFor="let recipe of recipes">
+      <p>
+        {{ recipe.name }}&nbsp;&nbsp;
+        ${{ recipe.cost}}&nbsp;&nbsp;
+        <button class="btn btn-primary" type="button" (click)="addToOrder(recipe)">Add</button>
+      </p>
+    </div>
+    <hr aria-hidden="true">
+    <div *ngFor="let item of orderItems">
+      <p>
+        {{ item.name }}&nbsp;&nbsp;
+        ${{ item.cost}}&nbsp;&nbsp;
+        <!-- <button class="btn btn-primary" type="button" (click)="addToOrder(recipe)">Add</button> -->
+      </p>
+    </div>
+    <div>
+      <p>orderItems: {{ orderItems | json }}</p>
+    </div>
+    <p><strong>Total:</strong> ${{ orderTotal }}</p>
+  </div>
 </div>
-<hr aria-hidden="true">
-<div *ngFor="let item of orderItems">
-  <p>
-    {{ item.name }}&nbsp;&nbsp;
-    ${{ item.cost}}&nbsp;&nbsp;
-    <!-- <button class="btn btn-primary" type="button" (click)="addToOrder(recipe)">Add</button> -->
-  </p>
-</div>
-<!-- <div>
-  <p>{{ orderItems | json }}</p>
-</div> -->
-<p><strong>Total:</strong> ${{ orderTotal }}</p>

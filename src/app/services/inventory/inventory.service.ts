@@ -14,4 +14,8 @@ export class InventoryService {
   getInventoryItems(): Observable<any> {
     return this.http.get<InventoryItem>(this.url + '/inventory');
   }
+
+  // putInventoryItems(): Observable<any> {
+  //   return this.http.put<InventoryItem>(this.url + '/inventory');
+  // }
 }
