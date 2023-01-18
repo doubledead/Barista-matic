@@ -74,7 +74,7 @@ export class OrderComponent implements OnInit {
         if (element.id == ingredientId) element.outOfStock = false;
       });
 
-      if (recipe.ingredients.every(recipe => !recipe.outOfStock)) recipe.outOfStock = false;
+      if (recipe.ingredients.every(ingredient => !ingredient.outOfStock)) recipe.outOfStock = false;
     });
 
   }
