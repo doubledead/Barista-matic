@@ -3,5 +3,6 @@ export interface Ingredient {
   cost?: number,
   name: string,
   outOfStock?: boolean,
+  restockFlag?: boolean,
   stock: number
 }

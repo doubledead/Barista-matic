@@ -63,6 +63,7 @@ export class OrderComponent implements OnInit {
       if (ingredientId === ingredient.id) {
         ingredient.stock = 10;
         ingredient.outOfStock = false;
+        ingredient.restockFlag = false;
         this.restockRecipe(ingredient.id);
       }
     });
@@ -93,8 +94,18 @@ export class OrderComponent implements OnInit {
                   if (drink.id == recipe.id) recipe.outOfStock = true;
                 });
               }
-            } else {
+            } else if (tempStockLevel < 0) {
+              ingredient.restockFlag = true;
+              this.recipes.forEach(recipe => {
+                if (drink.id == recipe.id) recipe.outOfStock = true;
+                recipe.ingredients.forEach(recipeIngredient => {
+                  if (ingredient.id == recipeIngredient.id) recipeIngredient.outOfStock = true;
+                });
+              });
               console.log('Cannot create drink');
+            }
+            else {
+              console.log('End');
             }
           }
         }
@@ -108,15 +119,20 @@ export class OrderComponent implements OnInit {
     if (drinkRecipe && !drinkRecipe.outOfStock) {
       this.manageInventory(drink);
 
-      this.orderTotal += drink.cost;
+      let drinkRecipe2ndCheck = this.recipe(drink.id);
 
-      let orderItem: OrderItem = {
-        name: drink.name,
-        cost: drink.cost,
-        quantity: 1
-      };
+      if (drinkRecipe2ndCheck && !drinkRecipe2ndCheck.outOfStock) {
+        this.orderTotal += drink.cost;
 
-      this.orderItems.push(orderItem);
+        let orderItem: OrderItem = {
+          name: drink.name,
+          cost: drink.cost,
+          quantity: 1
+        };
+
+        this.orderItems.push(orderItem);
+      }
+
     }
   }
 

@@ -5,6 +5,7 @@
       "cost": 0.75,
       "name": "Coffee",
       "outOfStock": false,
+      "restockStockFlag": false,
       "stock": 10
     },
     {
@@ -12,6 +13,7 @@
       "cost": 0.75,
       "name": "Decaf Coffee",
       "outOfStock": false,
+      "restockStockFlag": false,
       "stock": 10
     },
     {
@@ -19,6 +21,7 @@
       "cost": 0.25,
       "name": "Sugar",
       "outOfStock": false,
+      "restockStockFlag": false,
       "stock": 10
     },
     {
@@ -26,6 +29,7 @@
       "cost": 0.25,
       "name": "Cream",
       "outOfStock": false,
+      "restockStockFlag": false,
       "stock": 10
     },
     {
@@ -33,6 +37,7 @@
       "cost": 0.25,
       "name": "Steamed Milk",
       "outOfStock": false,
+      "restockStockFlag": false,
       "stock": 10
     },
     {
@@ -40,6 +45,7 @@
       "cost": 0.35,
       "name": "Foamed Milk",
       "outOfStock": false,
+      "restockStockFlag": false,
       "stock": 10
     },
     {
@@ -47,6 +53,7 @@
       "cost": 1.10,
       "name": "Espresso",
       "outOfStock": false,
+      "restockStockFlag": false,
       "stock": 10
     },
     {
@@ -54,6 +61,7 @@
       "cost": 0.90,
       "name": "Cocoa",
       "outOfStock": false,
+      "restockStockFlag": false,
       "stock": 10
     },
     {
@@ -61,6 +69,7 @@
       "cost": 1.00,
       "name": "Whipped Cream",
       "outOfStock": false,
+      "restockStockFlag": false,
       "stock": 10
     }
   ],

@@ -4,11 +4,10 @@
     <span [ngClass]="{'text-black-50': item.outOfStock}">
       {{ item.name }}: {{ item.stock}}&nbsp;
       <button
-        *ngIf="item.outOfStock"
+        *ngIf="item.outOfStock || item.restockFlag"
         class="btn btn-primary btn-sm"
         type="button"
-        (click)="restockIngrient(item.id)"
-        [attr.disabled]="!item.outOfStock ? true : null">
+        (click)="restockIngrient(item.id)">
         Restock
       </button>
     </span>
