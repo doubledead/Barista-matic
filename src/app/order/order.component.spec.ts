@@ -28,6 +28,7 @@ describe('OrderComponent', () => {
     expect(component.orderTotal).toBe(0);
     expect(component.orderStep).toBe(1);
     expect(component.errorState).toBe(false);
+    expect(component.viewJson).toBe(false);
 
     expect(component.ingredients).toHaveSize(0);
     expect(component.orders).toHaveSize(0);

@@ -4,13 +4,21 @@
     <span [ngClass]="{'text-black-50': item.outOfStock}">
       {{ item.name }}: {{ item.stock}}&nbsp;
       <button
-        *ngIf="item.outOfStock || item.restockFlag"
+        *ngIf="item.outOfStock"
         class="btn btn-primary btn-sm"
         type="button"
-        (click)="restockIngrient(item.id)">
+        (click)="restockIngredient(item.id)">
         Restock
       </button>
     </span>
+  </div>
+  <div class="p-2 bd-highlight">
+    <button
+        class="btn btn-outline-secondary btn-sm"
+        type="button"
+        (click)="restockMachine()">
+        Restock Machine
+      </button>
   </div>
 </div>
 <div class="row" *ngIf="orderStep == 1">
@@ -33,9 +41,9 @@
         {{ recipe.name }}&nbsp;&nbsp;
         ${{ recipe.cost}}&nbsp;&nbsp;
         <button
-          class="btn btn-success"
+          class="btn btn-outline-success btn-sm"
           type="button"
-          (click)="addToOrder(recipe)"
+          (click)="addToOrder(recipe.id)"
           [attr.disabled]="recipe.outOfStock ? true : null">
           Add
         </button>
@@ -83,17 +91,18 @@
   </div>
 </div>
 <!-- Object Arrays -->
-<!--
 <br aria-hidden="true">
-<div class="row">
+<button type="button" class="btn btn-outline-info btn-sm" (click)="viewJson = !viewJson">Toggle JSON</button>
+<br aria-hidden="true">
+<br aria-hidden="true">
+<div class="row" *ngIf="viewJson">
   <div class="col-4">
-    Orders: {{ orders | json }}
+    <pre>Orders: {{ orders | json }}</pre>
   </div>
   <div class="col-4">
-    Order Items: {{ orderItems | json }}
+    <pre>Order Items: {{ orderItems | json }}</pre>
   </div>
   <div class="col-4">
-    Recipes: {{ recipes | json }}
+    <pre>Recipes: {{ recipes | json }}</pre>
   </div>
 </div>
--->

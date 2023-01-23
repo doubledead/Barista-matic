@@ -30,6 +30,8 @@ export class OrderComponent implements OnInit {
     completed: false
   }
 
+  viewJson: boolean = false;
+
   // #endregion
 
   // #region // ---------- LIFECYCLE ---------- //
@@ -48,57 +50,56 @@ export class OrderComponent implements OnInit {
 
   // #endregion
 
-  // #region // ------------ Methods - Order ------------ //
+  // #region // ------------ Methods - Ingredients ------------ //
 
-  getRecipe(recipeId: number) {
-    return this.recipes.find(recipe => recipeId === recipe.id);
-  }
-
-  getIngredient(ingredientId: number) {
-    return this.ingredients.find(ingredient => ingredientId === ingredient.id);
-  }
-
-  setIngrientOutOfStock(ingredientId: number) {
-    this.ingredients.forEach(ingredient => {
-      if (ingredient.id === ingredientId) {
-        ingredient.outOfStock = true;
-        ingredient.restockFlag = true;
-      }
-    });
-  }
-
-  restockIngrient(ingredientId: number) {
+  restockIngredient(ingredientId: number) {
     this.ingredients.forEach(ingredient => {
       if (ingredientId === ingredient.id) {
         ingredient.stock = 10;
         ingredient.outOfStock = false;
-        ingredient.restockFlag = false;
         this.restockRecipe(ingredient.id);
       }
     });
   }
 
-  setRecipeIngrientOutOfStock(ingredientId: number) {
-    this.recipes.forEach(recipe => {
-      recipe.ingredients.forEach(ingredient => {
-        if (ingredient.id === ingredientId) {
-          ingredient.outOfStock = true;
-          ingredient.restockFlag = true;
-        }
+  restockIngrientsFull() {
+    this.ingredients.forEach(ingredient => {
+      ingredient.stock = 10;
+      ingredient.outOfStock = false;
+    });
+  }
+
+  udpateIngredientStock(id: number, newStockLevel: number) {
+    this.ingredients.forEach(ingredient => {
+      if (id === ingredient.id) {
+        ingredient.stock = newStockLevel;
+        if (newStockLevel == 0) ingredient.outOfStock = true;
+      }
+    });
+  }
+
+  getIngredientStock(recipeIngredients: Ingredient[]) {
+    const ingredientStock: Ingredient[] = [];
+    recipeIngredients.forEach(recipeIngredient => {
+      this.ingredients.forEach(ingredient => {
+        if (ingredient.id == recipeIngredient.id) ingredientStock.push(ingredient);
       });
     });
+
+    return ingredientStock;
   }
 
-  setRecipeOutOfStock(recipeId: number) {
-    this.recipes.forEach(recipe => {
-      if (recipe.id === recipeId) recipe.outOfStock = true;
-    });
+  restockMachine() {
+    this.restockIngrientsFull();
+    this.restockRecipesFull();
   }
 
-  setRecipesOutOfStock() {
-    this.recipes.forEach(recipe => {
-      if (recipe.ingredients.some(ingredient => ingredient.outOfStock)) recipe.outOfStock = true;
-    });
+  // #endregion
+
+  // #region // ------------ Methods - Recipe ------------ //
+
+  getRecipe(recipeId: number) {
+    return this.recipes.find(recipe => recipeId === recipe.id);
   }
 
   restockRecipe(ingredientId: number) {
@@ -111,40 +112,46 @@ export class OrderComponent implements OnInit {
     });
   }
 
-  checkRecipeStock(ingredientId: number) {
-    let currentIngredient = this.getIngredient(ingredientId);
+  restockRecipesFull() {
     this.recipes.forEach(recipe => {
-      recipe.ingredients.forEach(recipeIngredient => {
-        if (currentIngredient && (recipeIngredient.stock > currentIngredient.stock)) recipe.outOfStock = true;
+      recipe.ingredients.forEach(ingredient => { ingredient.outOfStock = false; });
+      recipe.outOfStock = false;
+    });
+  }
+
+  updateRecipeStatus() {
+    this.recipes.forEach(recipe => {
+      this.ingredients.forEach(ingredient => {
+        recipe.ingredients.forEach(recipeIngredient => {
+          if (recipeIngredient.id == ingredient.id) {
+            const newStockLevel: number = ingredient.stock - recipeIngredient.stock;
+            if (newStockLevel < 0) recipe.outOfStock = true;
+          }
+        });
       });
     });
   }
 
-  manageInventory(drink: Recipe) {
-    drink.ingredients.forEach(drinkIngredient => {
-      this.ingredients.forEach(ingredient => {
-        if (ingredient.name == drinkIngredient.name) {
-          if (!ingredient.outOfStock) {
-            let tempStockLevel: number = ingredient.stock - drinkIngredient.stock;
-            if (tempStockLevel >= 0) {
-              ingredient.stock = ingredient.stock - drinkIngredient.stock;
-              if (ingredient.stock == 0) {
-                ingredient.outOfStock = true;
-                this.setRecipeIngrientOutOfStock(ingredient.id);
-                this.setRecipesOutOfStock();
-              }
-            } else if (tempStockLevel < 0) {
-              ingredient.restockFlag = true;
-              this.recipes.forEach(recipe => {
-                if (drink.id == recipe.id) recipe.outOfStock = true;
-                recipe.ingredients.forEach(recipeIngredient => {
-                  if (ingredient.id == recipeIngredient.id) recipeIngredient.outOfStock = true;
-                });
-              });
-              console.log('Cannot create drink');
-            }
-            else {
-              console.log('End');
+  // #endregion
+
+  // #region // ------------ Methods - Order ------------ //
+
+  updateInventory(recipeOrder: Recipe) {
+    // Check Recipe Stock levels
+    const recipeIngredients: Ingredient[] = recipeOrder.ingredients;
+    // Get latest Ingredient stock levels for just recipeOrder ingredients
+    const ingredientStock: Ingredient[] = this.getIngredientStock(recipeIngredients);
+
+    // Update Ingredient stock levels for just recipeOrder ingredients
+    ingredientStock.forEach(ingredient => {
+      recipeIngredients.forEach(recipeIngredient => {
+        if (recipeIngredient.id == ingredient.id) {
+          const newStockLevel: number = ingredient.stock - recipeIngredient.stock;
+          if (newStockLevel >= 0) {
+            this.udpateIngredientStock(ingredient.id, newStockLevel);
+          } else {
+            if (newStockLevel < 0) {
+              console.log('Something went wrong! Ingredient ID: ', ingredient.id);
             }
           }
         }
@@ -152,26 +159,25 @@ export class OrderComponent implements OnInit {
     });
   }
 
-  addToOrder(drink: Recipe) {
-    let drinkRecipe = this.getRecipe(drink.id);
+  addOrder(recipeOrder: Recipe) {
+    this.orderTotal += recipeOrder.cost;
 
-    if (drinkRecipe && !drinkRecipe.outOfStock) {
-      this.manageInventory(drink);
+    let orderItem: OrderItem = {
+      name: recipeOrder.name,
+      cost: recipeOrder.cost,
+      quantity: 1
+    };
 
-      let drinkRecipe2ndCheck = this.getRecipe(drink.id);
+    this.orderItems.push(orderItem);
+  }
 
-      if (drinkRecipe2ndCheck && !drinkRecipe2ndCheck.outOfStock) {
-        this.orderTotal += drink.cost;
+  addToOrder(recipeId: number) {
+    const recipeOrder = this.getRecipe(recipeId);
 
-        let orderItem: OrderItem = {
-          name: drink.name,
-          cost: drink.cost,
-          quantity: 1
-        };
-
-        this.orderItems.push(orderItem);
-      }
-
+    if (recipeOrder && !recipeOrder.outOfStock) {
+      this.updateInventory(recipeOrder);
+      this.updateRecipeStatus();
+      this.addOrder(recipeOrder);
     }
   }
 
@@ -212,8 +218,7 @@ export class OrderComponent implements OnInit {
       total: this.orderTotal,
     };
 
-
-    // TODO: Add order to database
+    // TODO: add Order service and send to database
     // TODO: Wait for database response and set state accordingly
     this.orders.push(order);
 
@@ -221,7 +226,6 @@ export class OrderComponent implements OnInit {
       () => this.completeOrder(),
       2000
     );
-
   }
 
   completeOrder() {
