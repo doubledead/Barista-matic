@@ -138,6 +138,19 @@ export class RecipeService {
         ],
         "name": "Cappuccino",
         "outOfStock": false
+      },
+      {
+        "id": 7,
+        "cost": 4.75,
+        "ingredients": [
+          {
+            "id": 7,
+            "name": "Espresso",
+            "stock": 4
+          }
+        ],
+        "name": "Quad Shot",
+        "outOfStock": false
       }
     ]
   }

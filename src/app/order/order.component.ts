@@ -18,6 +18,8 @@ export class OrderComponent implements OnInit {
   orderId: number = 0;
   orderTotal: number = 0;
   orderTotalFormatted: string = '';
+  // 0 - Error, 1 - Start, 2 - Order, 3 - Processing,
+  // 4 - Complete, 5 - Canceled
   orderStep: number = 1;
   errorState: boolean = false;
 
@@ -45,7 +47,7 @@ export class OrderComponent implements OnInit {
       this.ingredients = data;
     });
 
-    this.recipetService.getIngredientsJSON().subscribe(data => {
+    this.recipetService.getRecipes().subscribe(data => {
       this.recipes = data;
     });
   }
@@ -54,14 +56,14 @@ export class OrderComponent implements OnInit {
 
   // #region // ------------ Methods - Ingredients ------------ //
 
-  restockIngrientsFull() {
+  private restockIngrientsFull() {
     this.ingredients.forEach(ingredient => {
       ingredient.stock = 10;
       ingredient.outOfStock = false;
     });
   }
 
-  udpateIngredientStock(id: number, newStockLevel: number) {
+  private udpateIngredientStock(id: number, newStockLevel: number) {
     this.ingredients.forEach(ingredient => {
       if (id === ingredient.id) {
         ingredient.stock = newStockLevel;
@@ -70,7 +72,7 @@ export class OrderComponent implements OnInit {
     });
   }
 
-  getIngredientStock(recipeIngredients: Ingredient[]) {
+  private getIngredientStock(recipeIngredients: Ingredient[]) {
     const ingredientStock: Ingredient[] = [];
     recipeIngredients.forEach(recipeIngredient => {
       this.ingredients.forEach(ingredient => {
@@ -90,18 +92,18 @@ export class OrderComponent implements OnInit {
 
   // #region // ------------ Methods - Recipe ------------ //
 
-  getRecipe(recipeId: number) {
+  private getRecipe(recipeId: number) {
     return this.recipes.find(recipe => recipeId === recipe.id);
   }
 
-  restockRecipesFull() {
+  private restockRecipesFull() {
     this.recipes.forEach(recipe => {
       recipe.ingredients.forEach(ingredient => { ingredient.outOfStock = false; });
       recipe.outOfStock = false;
     });
   }
 
-  updateRecipeStatus() {
+  private updateRecipeStatus() {
     this.recipes.forEach(recipe => {
       this.ingredients.forEach(ingredient => {
         recipe.ingredients.forEach(recipeIngredient => {
@@ -215,6 +217,18 @@ export class OrderComponent implements OnInit {
     this.orderStep = 4
 
     this.resetState();
+
+    setTimeout(
+      () => this.orderStep = 1,
+      2000
+    );
+  }
+
+  cancelOrder() {
+    this.orderStep = 5
+
+    this.resetState();
+    this.restockMachine();
 
     setTimeout(
       () => this.orderStep = 1,

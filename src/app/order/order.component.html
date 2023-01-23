@@ -45,10 +45,8 @@
     </div>
     <hr aria-hidden="true">
     <div *ngFor="let item of orderItems">
-      <p>
-        {{ item.name }}&nbsp;&nbsp;
-        ${{ item.cost}}&nbsp;&nbsp;
-      </p>
+      <span class="order-name">{{ item.name }}</span>
+      <span>${{ item.cost }}</span>
     </div>
     <div><strong>Total:</strong> {{ orderTotalFormatted }}</div>
     <br aria-hidden="true">
@@ -58,6 +56,13 @@
       (click)="dispenseDrink()"
       [attr.disabled]="orderItems.length == 0 ? true : null">
       Dispense Drink
+    </button>
+    &nbsp;&nbsp;
+    <button
+      class="btn btn-outline-danger btn-sm"
+      type="button"
+      (click)="cancelOrder()">
+      Cancel Order
     </button>
   </div>
 </div>
@@ -83,6 +88,14 @@
     </div>
   </div>
 </div>
+<div class="row" *ngIf="orderStep == 5">
+  <div class="col-6">
+    <div class="alert alert-warning" role="alert">
+      Your order has been canceled. Taking you back to the start...
+    </div>
+  </div>
+</div>
+<br aria-hidden="true">
 <!-- Object Arrays -->
 <br aria-hidden="true">
 <button type="button" class="btn btn-outline-info btn-sm" (click)="viewJson = !viewJson">Toggle JSON</button>
