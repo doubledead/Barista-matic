@@ -39,11 +39,11 @@ export class OrderComponent implements OnInit {
   constructor(private recipetService: RecipeService, private ingredientService: IngredientService) { }
 
   ngOnInit(): void {
-    this.ingredientService.getIngredients().subscribe(data => {
+    this.ingredientService.getIngredientsJSON().subscribe(data => {
       this.ingredients = data;
     });
 
-    this.recipetService.getRecipes().subscribe(data => {
+    this.recipetService.getIngredientsJSON().subscribe(data => {
       this.recipes = data;
     });
   }
