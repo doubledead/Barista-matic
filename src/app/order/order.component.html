@@ -2,14 +2,7 @@
 <div class="d-flex flex-row bd-highlight mb-3">
   <div *ngFor="let item of ingredients" class="p-2 bd-highlight">
     <span [ngClass]="{'text-black-50': item.outOfStock}">
-      {{ item.name }}: {{ item.stock}}&nbsp;
-      <button
-        *ngIf="item.outOfStock"
-        class="btn btn-primary btn-sm"
-        type="button"
-        (click)="restockIngredient(item.id)">
-        Restock
-      </button>
+      {{ item.name }}: {{ item.stock}}
     </span>
   </div>
   <div class="p-2 bd-highlight">

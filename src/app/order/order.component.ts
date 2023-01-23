@@ -52,16 +52,6 @@ export class OrderComponent implements OnInit {
 
   // #region // ------------ Methods - Ingredients ------------ //
 
-  restockIngredient(ingredientId: number) {
-    this.ingredients.forEach(ingredient => {
-      if (ingredientId === ingredient.id) {
-        ingredient.stock = 10;
-        ingredient.outOfStock = false;
-        this.restockRecipe(ingredient.id);
-      }
-    });
-  }
-
   restockIngrientsFull() {
     this.ingredients.forEach(ingredient => {
       ingredient.stock = 10;
@@ -100,16 +90,6 @@ export class OrderComponent implements OnInit {
 
   getRecipe(recipeId: number) {
     return this.recipes.find(recipe => recipeId === recipe.id);
-  }
-
-  restockRecipe(ingredientId: number) {
-    this.recipes.forEach(recipe => {
-      recipe.ingredients.forEach(element => {
-        if (element.id == ingredientId) element.outOfStock = false;
-      });
-
-      if (recipe.ingredients.every(ingredient => !ingredient.outOfStock)) recipe.outOfStock = false;
-    });
   }
 
   restockRecipesFull() {
