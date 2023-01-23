@@ -2,7 +2,7 @@
 <div class="d-flex flex-row bd-highlight mb-3">
   <div *ngFor="let item of ingredients" class="p-2 bd-highlight">
     <span [ngClass]="{'text-black-50': item.outOfStock}">
-      {{ item.name }}: {{ item.stock}}
+      {{ item.name }}: {{ item.stock }}
     </span>
   </div>
   <div class="p-2 bd-highlight">
@@ -50,7 +50,7 @@
         ${{ item.cost}}&nbsp;&nbsp;
       </p>
     </div>
-    <div><strong>Total:</strong> ${{ orderTotal }}</div>
+    <div><strong>Total:</strong> {{ orderTotalFormatted }}</div>
     <br aria-hidden="true">
     <button
       class="btn btn-primary"
@@ -90,12 +90,12 @@
 <br aria-hidden="true">
 <div class="row" *ngIf="viewJson">
   <div class="col-4">
-    <pre>Orders: {{ orders | json }}</pre>
+    <pre>Recipes: {{ recipes | json }}</pre>
   </div>
   <div class="col-4">
     <pre>Order Items: {{ orderItems | json }}</pre>
   </div>
   <div class="col-4">
-    <pre>Recipes: {{ recipes | json }}</pre>
+    <pre>Orders: {{ orders | json }}</pre>
   </div>
 </div>

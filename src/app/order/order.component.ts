@@ -5,6 +5,7 @@ import { RecipeService } from '../services/recipes/recipe.service';
 import { Recipe } from '../models/recipe';
 import { Order } from '../models/order';
 import { OrderItem } from '../models/orderItem';
+import { formatCurrency } from '@angular/common';
 
 @Component({
   selector: 'app-order',
@@ -16,6 +17,7 @@ export class OrderComponent implements OnInit {
 
   orderId: number = 0;
   orderTotal: number = 0;
+  orderTotalFormatted: string = '';
   orderStep: number = 1;
   errorState: boolean = false;
 
@@ -141,6 +143,7 @@ export class OrderComponent implements OnInit {
 
   addOrder(recipeOrder: Recipe) {
     this.orderTotal += recipeOrder.cost;
+    this.orderTotalFormatted = formatCurrency(this.orderTotal, 'en-US', '$')
 
     let orderItem: OrderItem = {
       name: recipeOrder.name,
