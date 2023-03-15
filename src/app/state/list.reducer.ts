@@ -8,9 +8,9 @@ export const listReducer = createReducer(
   on(OrderActions.removeOrder, (state, {id }) =>
     state.filter((newId) => newId !== id)
   ),
-  on(OrderActions.addOrder, (state, { bookId }) => {
-    if (state.indexOf(bookId) > -1) return state;
+  on(OrderActions.addOrder, (state, { id }) => {
+    if (state.indexOf(id) > -1) return state;
 
-    return [...state, bookId];
+    return [...state, id];
   })
 );
