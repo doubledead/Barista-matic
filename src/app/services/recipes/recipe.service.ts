@@ -161,7 +161,7 @@ export class RecipeService {
     return this.http.get<Recipe>(this.url + '/recipes');
   }
 
-  getIngredientsJSON(): Observable<any> {
+  getRecipesJSON(): Observable<any> {
     return of(this.data.recipes);
   }
 }

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { IngredientService } from '../services/ingredients/ingredient.service';
-import { Ingredient } from '../models/ingredient';
-import { RecipeService } from '../services/recipes/recipe.service';
-import { Recipe } from '../models/recipe';
-import { Order } from '../models/order';
-import { OrderItem } from '../models/orderItem';
+import { IngredientService } from '../../services/ingredients/ingredient.service';
+import { Ingredient } from '../../models/ingredient';
+import { RecipeService } from '../../services/recipes/recipe.service';
+import { Recipe } from '../../models/recipe';
+import { Order } from '../../models/order';
+import { OrderItem } from '../../models/orderItem';
 import { formatCurrency } from '@angular/common';
 
 @Component({
@@ -43,12 +43,22 @@ export class OrderComponent implements OnInit {
   constructor(private recipetService: RecipeService, private ingredientService: IngredientService) { }
 
   ngOnInit(): void {
-    this.ingredientService.getIngredientsJSON().subscribe(data => {
-      this.ingredients = data;
+    this.ingredientService.getIngredients().subscribe({
+      next: data => {
+        console.log('Ingredients:', data)
+        this.ingredients = data;
+      },
+      error: err => console.error('Error notification ingredientService: ' + err),
+      complete: () => console.log('Complete notification ingredientService')
     });
 
-    this.recipetService.getRecipes().subscribe(data => {
-      this.recipes = data;
+    this.recipetService.getRecipes().subscribe({
+      next: data => {
+        console.log('Recipes:', data)
+        this.recipes = data;
+      },
+      error: err => console.error('Error notification recipetService: ' + err),
+      complete: () => console.log('Complete notification recipetService')
     });
   }
 
