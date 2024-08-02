@@ -1,6 +1,7 @@
 export interface InventoryItem {
   id: number,
-  ingredientCode: string,
+  itemCode: string,
   outOfStock: boolean,
-  quantity: number
+  quantity: number,
+  sku: string
 }

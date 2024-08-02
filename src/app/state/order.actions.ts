@@ -1,5 +1,5 @@
 import { createActionGroup, props } from '@ngrx/store';
-import { Order } from '../models/order';
+import { Order } from '../features/order/models/order';
 
 export const OrderActions = createActionGroup({
   source: 'Orders',

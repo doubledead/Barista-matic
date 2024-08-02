@@ -5,10 +5,12 @@ import { RecipeService } from '../../services/recipes/recipe.service';
 import { Recipe } from '../../models/recipe';
 import { Order } from '../../models/order';
 import { OrderItem } from '../../models/orderItem';
-import { formatCurrency } from '@angular/common';
+import { CommonModule, formatCurrency } from '@angular/common';
 
 @Component({
   selector: 'app-order',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss']
 })
