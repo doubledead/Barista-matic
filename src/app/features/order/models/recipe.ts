@@ -1,4 +1,11 @@
-import { Ingredient } from "./ingredient"
+export interface Ingredient {
+  id: number,
+  code: string,
+  cost?: number,
+  name: string,
+  outOfStock?: boolean,
+  stock: number
+}
 
 export interface Recipe {
   id: number,

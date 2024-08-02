@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IngredientService } from '../../services/ingredients/ingredient.service';
-import { Ingredient } from '../../models/ingredient';
 import { RecipeService } from '../../services/recipes/recipe.service';
-import { Recipe } from '../../models/recipe';
-import { Order } from '../../models/order';
-import { OrderItem } from '../../models/orderItem';
+import { Ingredient, Recipe } from '../../models/recipe';
+import { Order, OrderItem } from '../../models/order';
 import { CommonModule, formatCurrency } from '@angular/common';
 
 @Component({
